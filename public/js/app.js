@@ -2101,10 +2101,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      tasks: []
+      tasks: [],
+      ratios: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     };
   },
   methods: {
@@ -2121,6 +2125,9 @@ __webpack_require__.r(__webpack_exports__);
       axios["delete"]('/api/tasks/' + id).then(function (res) {
         _this2.getTasks();
       });
+    },
+    changeRatio: function changeRatio(task) {
+      axios.put('/api/tasks/' + task.id, task);
     }
   },
   mounted: function mounted() {
@@ -2139,6 +2146,24 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -38196,6 +38221,52 @@ var render = function() {
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(task.person_in_charge))]),
             _vm._v(" "),
+            _c("td", [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: task.ratio,
+                      expression: "task.ratio"
+                    }
+                  ],
+                  domProps: { value: task.ratio },
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          task,
+                          "ratio",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.changeRatio(task)
+                      }
+                    ]
+                  }
+                },
+                _vm._l(_vm.ratios, function(ratio) {
+                  return _c("option", [_vm._v(_vm._s(ratio))])
+                }),
+                0
+              ),
+              _vm._v(" %\n            ")
+            ]),
+            _vm._v(" "),
             _c(
               "td",
               [
@@ -38211,25 +38282,23 @@ var render = function() {
                       _vm._v("編集")
                     ])
                   ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteTask(task.id)
+                      }
+                    }
+                  },
+                  [_vm._v("削除")]
                 )
               ],
               1
-            ),
-            _vm._v(" "),
-            _c("td", [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger",
-                  on: {
-                    click: function($event) {
-                      return _vm.deleteTask(task.id)
-                    }
-                  }
-                },
-                [_vm._v("削除")]
-              )
-            ])
+            )
           ])
         }),
         0
@@ -38252,7 +38321,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("担当者")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("進捗率")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } })
       ])
@@ -38283,136 +38352,257 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-sm-6" }, [
-        _c("form", [
-          _c("div", { staticClass: "form-group row border-bottom" }, [
-            _c(
-              "label",
-              { staticClass: "col-sm-3 col-form-label", attrs: { for: "id" } },
-              [_vm._v("ID")]
-            ),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
+        _c(
+          "form",
+          [
+            _c("div", { staticClass: "form-group row border-bottom" }, [
+              _c(
+                "label",
                 {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.task.id,
-                  expression: "task.id"
-                }
-              ],
-              staticClass: "col-sm-9 form-control-plaintext",
-              attrs: { type: "text", readonly: "", id: "id" },
-              domProps: { value: _vm.task.id },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+                  staticClass: "col-sm-3 col-form-label",
+                  attrs: { for: "id" }
+                },
+                [_vm._v("ID")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.task.id,
+                    expression: "task.id"
                   }
-                  _vm.$set(_vm.task, "id", $event.target.value)
+                ],
+                staticClass: "col-sm-9 form-control-plaintext",
+                attrs: { type: "text", readonly: "", id: "id" },
+                domProps: { value: _vm.task.id },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.task, "id", $event.target.value)
+                  }
                 }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group row border-bottom" }, [
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group row border-bottom" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "col-sm-3 col-form-label",
+                  attrs: { for: "title" }
+                },
+                [_vm._v("タスク")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.task.title,
+                    expression: "task.title"
+                  }
+                ],
+                staticClass: "col-sm-9 form-control-plaintext",
+                attrs: { type: "text", readonly: "", id: "title" },
+                domProps: { value: _vm.task.title },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.task, "title", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group row border-bottom" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "col-sm-3 col-form-label",
+                  attrs: { for: "content" }
+                },
+                [_vm._v("内容")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.task.content,
+                    expression: "task.content"
+                  }
+                ],
+                staticClass: "col-sm-9 form-control-plaintext",
+                attrs: { type: "text", readonly: "", id: "content" },
+                domProps: { value: _vm.task.content },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.task, "content", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group row border-bottom" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "col-sm-3 col-form-label",
+                  attrs: { for: "person-in-charge" }
+                },
+                [_vm._v("担当者")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.task.person_in_charge,
+                    expression: "task.person_in_charge"
+                  }
+                ],
+                staticClass: "col-sm-9 form-control-plaintext",
+                attrs: { type: "text", readonly: "", id: "person-in-charge" },
+                domProps: { value: _vm.task.person_in_charge },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.task, "person_in_charge", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group row border-bottom" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "col-sm-3 col-form-label",
+                  attrs: { for: "ratio" }
+                },
+                [_vm._v("進捗率t")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.task.ratio,
+                    expression: "task.ratio"
+                  }
+                ],
+                staticClass: "col-sm-9 form-control-plaintext",
+                attrs: { type: "text", readonly: "", id: "ratio" },
+                domProps: { value: _vm.task.ratio },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.task, "ratio", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v("%\n                ")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group row border-bottom" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "col-sm-3 col-form-label",
+                  attrs: { for: "created_at" }
+                },
+                [_vm._v("登録日時")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.task.created_at,
+                    expression: "task.created_at"
+                  }
+                ],
+                staticClass: "col-sm-9 form-control-plaintext",
+                attrs: { type: "text", readonly: "", id: "created_at" },
+                domProps: { value: _vm.task.created_at },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.task, "created_at", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group row border-bottom" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "col-sm-3 col-form-label",
+                  attrs: { for: "updated_at" }
+                },
+                [_vm._v("更新日時")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.task.updated_at,
+                    expression: "task.updated_at"
+                  }
+                ],
+                staticClass: "col-sm-9 form-control-plaintext",
+                attrs: { type: "text", readonly: "", id: "updated_at" },
+                domProps: { value: _vm.task.updated_at },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.task, "updated_at", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
             _c(
-              "label",
+              "router-link",
               {
-                staticClass: "col-sm-3 col-form-label",
-                attrs: { for: "title" }
+                attrs: {
+                  to: { name: "task.edit", params: { taskId: _vm.task.id } }
+                }
               },
-              [_vm._v("タスク")]
-            ),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.task.title,
-                  expression: "task.title"
-                }
-              ],
-              staticClass: "col-sm-9 form-control-plaintext",
-              attrs: { type: "text", readonly: "", id: "title" },
-              domProps: { value: _vm.task.title },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.task, "title", $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group row border-bottom" }, [
-            _c(
-              "label",
-              {
-                staticClass: "col-sm-3 col-form-label",
-                attrs: { for: "content" }
-              },
-              [_vm._v("内容")]
-            ),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.task.content,
-                  expression: "task.content"
-                }
-              ],
-              staticClass: "col-sm-9 form-control-plaintext",
-              attrs: { type: "text", readonly: "", id: "content" },
-              domProps: { value: _vm.task.content },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.task, "content", $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group row border-bottom" }, [
-            _c(
-              "label",
-              {
-                staticClass: "col-sm-3 col-form-label",
-                attrs: { for: "person-in-charge" }
-              },
-              [_vm._v("担当者")]
-            ),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.task.person_in_charge,
-                  expression: "task.person_in_charge"
-                }
-              ],
-              staticClass: "col-sm-9 form-control-plaintext",
-              attrs: { type: "text", readonly: "", id: "person-in-charge" },
-              domProps: { value: _vm.task.person_in_charge },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.task, "person_in_charge", $event.target.value)
-                }
-              }
-            })
-          ])
-        ])
+              [
+                _c("button", { staticClass: "btn btn-success" }, [
+                  _vm._v("編集")
+                ])
+              ]
+            )
+          ],
+          1
+        )
       ])
     ])
   ])
