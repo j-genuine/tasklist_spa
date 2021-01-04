@@ -1,5 +1,7 @@
 import VueRouter from 'vue-router';
+import Paginate from 'vuejs-paginate';
 import HeaderComponent from "./components/HeaderComponent.vue";
+import HomeComponent from "./components/HomeComponent.vue";
 import TaskListComponent from "./components/TaskListComponent.vue";
 import TaskShowComponent from "./components/TaskShowComponent.vue";
 import TaskCreateComponent from "./components/TaskCreateComponent.vue";
@@ -20,6 +22,11 @@ Vue.use(VueRouter);
 const router = new VueRouter({
     mode: 'history',
     routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: HomeComponent
+        },
         {
             path: '/tasks',
             name: 'task.list',
@@ -58,6 +65,7 @@ const router = new VueRouter({
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('header-component', HeaderComponent);
+Vue.component('paginate', Paginate);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
