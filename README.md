@@ -6,5 +6,5 @@ Vue.js + Laravel API でテスト用に作成した、Single Page Applicationで
 - 一覧ページでの進捗状況設定
 - vuejs-paginateを使ったページネーション
 
-■公開URL：<br/>
+### 公開URL
 https://tasklist-spa2101j.herokuapp.com/
